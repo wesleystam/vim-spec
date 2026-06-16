@@ -13,31 +13,31 @@ endfunction
 
 " Set Javascript
 function! s:SetJavascriptCommand()
-  if !exists("g:mocha_js_command")
-    let s:cmd = "mocha {spec}"
+  if !exists("g:js_test_command")
+    let s:cmd = "npm test -- {spec}"
     call s:GUIRunning()
   else
-    let g:spec_command = g:mocha_js_command
+    let g:spec_command = g:js_test_command
   endif
 endfunction
 
 " Set Javascript Debug
 function! s:SetJavascriptDebugCommand()
-  if !exists("g:mocha_debug_command")
-    let s:cmd = "mocha debug {spec}"
+  if !exists("g:js_debug_command")
+    let s:cmd = "npm run test:debug -- {spec}"
     call s:GUIRunning()
   else
-    let g:spec_command = g:mocha_debug_command
+    let g:spec_command = g:js_debug_command
   endif
 endfunction
 
 " Set Coffeescript
 function! s:SetCoffeescriptCommand()
-  if !exists("g:mocha_coffee_command")
-    let s:cmd = "mocha --compilers coffee:coffee-script/register {spec}"
+  if !exists("g:js_coffee_command")
+    let s:cmd = "npm test -- {spec}"
     call s:GUIRunning()
   else
-    let g:spec_command = g:mocha_coffee_command
+    let g:spec_command = g:js_coffee_command
   endif
 endfunction
 

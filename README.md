@@ -52,19 +52,20 @@ Like [thoughtbot/vim-rspec](https://github.com/thoughtbot/vim-rspec), the
 following variables can be overwritten for custom spec commands:
 
 * `g:rspec_command`
-* `g:mocha_js_command`
-* `g:mocha_coffee_command`
+* `g:js_test_command`
+* `g:js_debug_command`
+* `g:js_coffee_command`
 
 Examples:
 
 ```vim
 let g:rspec_command = "!rspec --drb {spec}"
-let g:mocha_js_command = "!mocha --recursive --no-colors {spec}"
-let g:mocha_coffee_command = "!mocha -b --compilers coffee:coffee-script{spec}"
+let g:js_test_command = "yarn test {spec}"
+let g:js_coffee_command = "!mocha -b --compilers coffee:coffee-script{spec}"
 
 " Using test runners
 let g:rspec_command = "Dispatch zeus rspec {spec}"
-let g:mocha_coffee_command = "!cortado {spec}" "See geekjuice/vim-mocha
+let g:js_coffee_command = "!cortado {spec}" "See geekjuice/vim-mocha
 ```
 
 ## Notes/Issues
