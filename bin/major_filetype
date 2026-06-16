@@ -4,7 +4,7 @@
 
 # Defaults: Ruby, Javascript, Coffeescript
 
-filetypes="rb\|coffee\|js"
+filetypes="rb\|coffee\|jsx\|js"
 
 find . -type f                                  | \
     tr '[:upper:]' '[:lower:]'                  | \

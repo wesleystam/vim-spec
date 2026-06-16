@@ -66,7 +66,7 @@ function! s:GetCorrectCommand(debug)
   if &filetype ==? 'ruby'
     call s:SetRubyCommand()
     " Set default {mocha} command (javascript)
-  elseif &filetype ==? 'javascript' || &filetype ==? 'typescript.tsx' || &filetype ==? 'typescript'
+  elseif &filetype ==? 'javascript' || &filetype ==? 'javascript.jsx' || &filetype ==? 'javascriptreact' || &filetype ==? 'typescript.tsx' || &filetype ==? 'typescript'
     " set debug command here
     if a:debug
       call s:SetJavascriptDebugCommand()
@@ -162,7 +162,7 @@ endfunction
 
 " Current Spec File Name
 function! InSpecFile()
-  return match(expand("%"),'\v(.tsx|.ts|.js|.coffee|_spec.rb|.feature)$') != -1
+  return match(expand("%"),'\v(.tsx|.ts|.jsx|.js|.coffee|_spec.rb|.feature)$') != -1
 endfunction
 
 " Cache Last Spec Command
