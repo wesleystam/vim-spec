@@ -3,6 +3,8 @@
 * switch JS defaults from mocha to npm test
 * rename g:mocha_* command variables to g:js_*
 * add yarn/npm workspace support
+* fix nearest-test name filter for vitest/jest (-g -> -t)
+* make debug command workspace-aware
 
 
 ## 2014-02-04

@@ -33,11 +33,15 @@ endfunction
 
 " Set Javascript Debug
 function! s:SetJavascriptDebugCommand()
-  if !exists("g:js_debug_command")
-    let s:cmd = "npm run test:debug -- {spec}"
+  if exists("g:js_debug_command")
+    let g:spec_command = g:js_debug_command
+  elseif s:Workspace() !=? ""
+    " Monorepo: debug the test scoped to the file's workspace (vitest inspect)
+    let s:cmd = "yarn workspace {workspace} run test {spec} --inspect-brk --no-file-parallelism"
     call s:GUIRunning()
   else
-    let g:spec_command = g:js_debug_command
+    let s:cmd = "npm run test:debug -- {spec}"
+    call s:GUIRunning()
   endif
 endfunction
 
@@ -166,7 +170,7 @@ function! RunNearestSpec(debug)
       let l:spec = s:SpecPath() . ":" . line(".")
     else
       call s:GetNearestTest()
-      let l:spec = s:SpecPath() . " -g '" . s:nearestTest . "'"
+      let l:spec = s:SpecPath() . " -t '" . s:nearestTest . "'"
     end
     call RunSpecs(l:spec, a:debug)
   else
