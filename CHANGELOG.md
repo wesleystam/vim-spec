@@ -1,3 +1,10 @@
+## 2026-06-16
+* add JSX support (.jsx files run like .js)
+* switch JS defaults from mocha to npm test
+* rename g:mocha_* command variables to g:js_*
+* add yarn/npm workspace support
+
+
 ## 2014-02-04
 * Update to give test dir precedence over spec dir
 
