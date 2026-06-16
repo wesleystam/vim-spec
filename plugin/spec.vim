@@ -11,13 +11,23 @@ function! s:SetRubyCommand()
   endif
 endfunction
 
+" Yarn/npm workspace name derived from a packages/<name>/ path (empty if none)
+function! s:Workspace()
+  let l:match = matchlist(@%, '\vpackages/([^/]+)/')
+  return len(l:match) > 1 ? l:match[1] : ""
+endfunction
+
 " Set Javascript
 function! s:SetJavascriptCommand()
-  if !exists("g:js_test_command")
-    let s:cmd = "npm test -- {spec}"
+  if exists("g:js_test_command")
+    let g:spec_command = g:js_test_command
+  elseif s:Workspace() !=? ""
+    " Monorepo: run the test scoped to the file's workspace
+    let s:cmd = "yarn workspace {workspace} run test {spec}"
     call s:GUIRunning()
   else
-    let g:spec_command = g:js_test_command
+    let s:cmd = "npm test -- {spec}"
+    call s:GUIRunning()
   endif
 endfunction
 
@@ -128,10 +138,21 @@ function! RunAllSpecs()
   call RunSpecs(l:spec, 0)
 endfunction
 
+" Spec path, with optional prefix stripped (e.g. monorepo package root).
+" g:spec_path_prefix is a Vim regex, anchored at the start of the path.
+" Example: "packages/[^/]*/" strips "packages/<anyname>/".
+function! s:SpecPath()
+  let l:path = @%
+  if exists("g:spec_path_prefix")
+    let l:path = substitute(l:path, '^' . g:spec_path_prefix, '', '')
+  endif
+  return l:path
+endfunction
+
 " Current File
 function! RunCurrentSpecFile()
   if InSpecFile()
-    let l:spec = @%
+    let l:spec = s:SpecPath()
     call RunSpecs(l:spec, 0)
   else
     call RunLastSpec()
@@ -142,10 +163,10 @@ endfunction
 function! RunNearestSpec(debug)
   if InSpecFile()
     if &filetype ==? "ruby"
-      let l:spec = @% . ":" . line(".")
+      let l:spec = s:SpecPath() . ":" . line(".")
     else
       call s:GetNearestTest()
-      let l:spec = @% . " -g '" . s:nearestTest . "'"
+      let l:spec = s:SpecPath() . " -g '" . s:nearestTest . "'"
     end
     call RunSpecs(l:spec, a:debug)
   else
@@ -167,7 +188,8 @@ endfunction
 
 " Cache Last Spec Command
 function! SetLastSpecCommand(spec)
-  let s:last_spec_command = substitute(g:spec_command, "{spec}", a:spec, "g")
+  let l:command = substitute(g:spec_command, "{spec}", a:spec, "g")
+  let s:last_spec_command = substitute(l:command, "{workspace}", s:Workspace(), "g")
 endfunction
 
 " Spec Runner
